@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Experiment 4 - Registration Validation | AIKTC — Shaikh Mohd Talha</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+  }
+
+  /* ===== Background Image ===== */
+  body {
+    background: url("download.jpeg") no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  /* ===== Overlay for readability ===== */
+  .overlay {
+    background: rgba(0, 0, 0, 0.72);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== Header ===== */
+  header {
+    text-align: center;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.55);
+    border-bottom: 2px solid #ffcc00;
+  }
+
+  header h1 {
+    color: #ffcc00;
+    font-size: 1.8rem;
+  }
+
+  header p {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+  }
+
+  /* ===== Form Container ===== */
+  .container {
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.97);
+    color: #111;
+    padding: 28px 36px;
+    margin: 40px auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.5);
+  }
+
+  h2 {
+    text-align: center;
+    color: #003366;
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 9px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  input[type="submit"], input[type="reset"] {
+    width: 48%;
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+
+  input[type="submit"]:hover, input[type="reset"]:hover {
+    background-color: #ffcc00;
+    color: #003366;
+  }
+
+  .btns {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .error {
+    color: red;
+    font-size: 13px;
+    min-height: 16px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    background: rgba(0, 0, 0, 0.62);
+    color: #ffcc00;
+    text-align: center;
+    padding: 12px;
+    border-top: 2px solid #ffcc00;
+  }
+
+  footer strong {
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media (max-width:480px) {
+    .container { margin: 20px 12px; padding: 18px; }
+    input[type="submit"], input[type="reset"] { width: 100%; margin-top: 10px; }
+    .btns { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="overlay">
+    <header>
+      <h1>Anjuman-I-Islam's Kalsekar Technical Campus</h1>
+      <p>Affiliated to University of Mumbai | Approved by AICTE</p>
+    </header>
+
+    <div class="container">
+      <h2>Registration Form Validation</h2>
+
+      <form id="regForm" onsubmit="return validateForm()" autocomplete="off" novalidate>
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" placeholder="Enter first name" required minlength="6" pattern="[A-Za-z]+" title="Only alphabets allowed, min 6 characters">
+        <span id="fnameError" class="error"></span>
+
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" placeholder="Enter last name" required pattern="[A-Za-z\s]+" title="Only alphabets allowed">
+        <span id="lnameError" class="error"></span>
+
+        <label for="pass">Password:</label>
+        <input type="password" id="pass" placeholder="Enter password" required minlength="6" title="At least 6 characters">
+        <span id="passError" class="error"></span>
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" placeholder="example@domain.com" required>
+        <span id="emailError" class="error"></span>
+
+        <label for="mobile">Mobile Number:</label>
+        <input type="text" id="mobile" placeholder="Enter 10-digit number" required pattern="[0-9]{10}" title="10 digit number only">
+        <span id="mobileError" class="error"></span>
+
+        <label for="address">Address:</label>
+        <textarea id="address" rows="3" placeholder="Enter address" required></textarea>
+        <span id="addressError" class="error"></span>
+
+        <div class="btns">
+          <input type="submit" value="Register">
+          <input type="reset" value="Clear">
+        </div>
+      </form>
+    </div>
+
+    <footer>
+      Created by <strong>Shaikh Mohd Talha</strong> | Roll No: <strong>23AI53</strong> | Batch: <strong>03</strong>
+    </footer>
+  </div>
+
+<script>
+(function () {
+  // Clear individual error when user types
+  const fields = ['fname','lname','pass','email','mobile','address'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById(id + 'Error');
+    el.addEventListener('input', () => { err.innerText = ''; });
+  });
+})();
+
+function validateForm() {
+  let valid = true;
+  // Reset all error messages
+  document.querySelectorAll('.error').forEach(el => el.innerText = "");
+
+  // Helper to set error and capture first invalid field
+  let firstInvalid = null;
+  function setErr(id, msg) {
+    document.getElementById(id + 'Error').innerText = msg;
+    if (!firstInvalid) firstInvalid = document.getElementById(id);
+    valid = false;
+  }
+
+  // First Name validation
+  const fname = document.getElementById("fname").value.trim();
+  if (!/^[A-Za-z]+$/.test(fname)) {
+    setErr('fname', "First name should contain only alphabets.");
+  } else if (fname.length < 6) {
+    setErr('fname', "Minimum 6 characters required.");
+  }
+
+  // Last Name validation
+  const lname = document.getElementById("lname").value.trim();
+  if (lname === "") {
+    setErr('lname', "Last name cannot be empty.");
+  } else if (!/^[A-Za-z\s]+$/.test(lname)) {
+    setErr('lname', "Last name should contain only alphabets.");
+  }
+
+  // Password validation
+  const pass = document.getElementById("pass").value;
+  if (pass.length < 6) {
+    setErr('pass', "Password must be at least 6 characters.");
+  }
+
+  // Email validation
+  const email = document.getElementById("email").value.trim();
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+  if (!emailPattern.test(email)) {
+    setErr('email', "Enter a valid email (name@domain.com).");
+  }
+
+  // Mobile validation
+  const mobile = document.getElementById("mobile").value.trim();
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    setErr('mobile', "Enter a valid 10-digit mobile number.");
+  }
+
+  // Address validation
+  const address = document.getElementById("address").value.trim();
+  if (address === "") {
+    setErr('address', "Address cannot be empty.");
+  }
+
+  // Focus first invalid field if any
+  if (!valid && firstInvalid) {
+    firstInvalid.focus();
+  }
+
+  // Final message & form behavior
+  if (valid) {
+    alert("✅ Registration Successful!");
+    document.getElementById("regForm").reset();
+  }
+
+  // prevent actual submit for demo purposes
+  return false;
+}
+</script>
+</body>
+</html>
